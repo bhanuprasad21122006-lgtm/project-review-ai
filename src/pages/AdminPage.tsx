@@ -117,6 +117,22 @@ export default function AdminPage() {
 
         {isAdmin && (
           <>
+            {/* Source download */}
+            <NBPanel className="mb-8 p-5">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <p className="text-sm font-bold">Full project source</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">
+                    Complete codebase as a zip — dependencies and generated
+                    files excluded (run `bun install` after unzipping).
+                  </p>
+                </div>
+                <a href="/project-mentor-ai.zip" download>
+                  <NBButton variant="primary">Download source (.zip)</NBButton>
+                </a>
+              </div>
+            </NBPanel>
+
             {/* Stats */}
             <div className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
               {[
