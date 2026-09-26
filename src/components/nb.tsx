@@ -6,8 +6,9 @@ import {
 import { cn } from "@/lib/utils";
 
 /**
- * Neobrutalism Minimalism kit.
- * Square corners, 2px ink borders, flat color blocks, hard offset shadows.
+ * Neobrutalism kit — dark premium technical edition.
+ * Square corners, hard edges, offset shadows, flat accent blocks.
+ * Text on bright accent blocks uses `text-accent-ink` for readability.
  */
 
 // ── Panel ───────────────────────────────────────────────────────────────────
@@ -22,12 +23,7 @@ export function NBPanel({
   as?: "div" | "section" | "li" | "span";
 }) {
   return (
-    <Tag
-      className={cn(
-        "nb-block nb-shadow bg-card text-card-foreground",
-        className,
-      )}
-    >
+    <Tag className={cn("nb-block nb-shadow bg-card text-card-foreground", className)}>
       {children}
     </Tag>
   );
@@ -51,24 +47,23 @@ export function NBButton({
       data-nb-button={variant}
       className={cn(
         // base
-        "inline-flex items-center justify-center gap-2 border-2 border-ink font-bold uppercase tracking-wide",
+        "inline-flex items-center justify-center gap-2 border-2 border-edge font-bold uppercase tracking-wide",
         "transition-[transform,box-shadow] duration-100 outline-none",
         "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         "disabled:pointer-events-none disabled:opacity-50",
         // pressable: hover lifts, active presses into the shadow
-        "hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_0_var(--ink)]",
+        "hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_0_#000]",
         "active:translate-x-0.5 active:translate-y-0.5 active:shadow-none",
         // sizes
         size === "sm" && "h-8 px-3 text-xs",
         size === "md" && "h-10 px-5 text-sm",
         size === "lg" && "h-12 px-7 text-base",
-        // variants (flat blocks)
-        variant === "primary" && "nb-shadow bg-primary text-ink",
-        variant === "ink" && "nb-shadow bg-ink text-background",
-        variant === "outline" && "nb-shadow bg-card text-ink",
-        variant === "danger" &&
-          "nb-shadow bg-destructive text-white [text-shadow:0_1px_0_rgba(0,0,0,0.2)]",
-        variant === "ghost" && "bg-transparent text-ink shadow-none",
+        // variants — flat blocks, accent-ink for contrast on bright fills
+        variant === "primary" && "nb-shadow bg-primary text-accent-ink",
+        variant === "ink" && "nb-shadow bg-ink text-ink-inverse",
+        variant === "outline" && "nb-shadow bg-card text-foreground",
+        variant === "danger" && "nb-shadow bg-destructive text-accent-ink",
+        variant === "ghost" && "bg-transparent text-foreground shadow-none",
         className,
       )}
       {...props}
@@ -85,10 +80,10 @@ export function NBInput({
   return (
     <input
       className={cn(
-        "h-11 w-full border-2 border-ink bg-card px-3 py-2 text-sm font-medium text-ink",
+        "h-11 w-full border-2 border-edge bg-card px-3 py-2 text-sm font-medium text-foreground",
         "placeholder:font-normal placeholder:text-muted-foreground",
         "outline-none transition-shadow",
-        "focus:shadow-[3px_3px_0_0_var(--ink)]",
+        "focus:border-primary/70 focus:shadow-[3px_3px_0_0_#000]",
         "disabled:cursor-not-allowed disabled:opacity-60",
         className,
       )}
@@ -110,7 +105,7 @@ export function NBLabel({
     <label
       htmlFor={htmlFor}
       className={cn(
-        "mb-1.5 block text-xs font-bold uppercase tracking-widest text-ink",
+        "mb-1.5 block text-xs font-bold uppercase tracking-widest text-foreground",
         className,
       )}
     >
@@ -127,20 +122,29 @@ export function NBBadge({
   className,
 }: {
   children: ReactNode;
-  tone?: "paper" | "yellow" | "green" | "blue" | "red" | "purple" | "ink";
+  tone?:
+    | "paper"
+    | "yellow"
+    | "green"
+    | "blue"
+    | "red"
+    | "purple"
+    | "ink"
+    | "lime";
   className?: string;
 }) {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 border-2 border-ink px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide",
-        tone === "paper" && "bg-card text-ink",
-        tone === "yellow" && "bg-primary text-ink",
-        tone === "green" && "bg-nb-green text-ink",
-        tone === "blue" && "bg-nb-blue text-ink",
-        tone === "red" && "bg-destructive text-white",
-        tone === "purple" && "bg-nb-purple text-ink",
-        tone === "ink" && "bg-ink text-background",
+        "inline-flex items-center gap-1 border-2 border-edge px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide",
+        tone === "paper" && "bg-card text-foreground",
+        tone === "yellow" && "bg-nb-yellow text-accent-ink",
+        tone === "green" && "bg-nb-green text-accent-ink",
+        tone === "blue" && "bg-nb-blue text-accent-ink",
+        tone === "red" && "bg-nb-red text-accent-ink",
+        tone === "purple" && "bg-nb-purple text-accent-ink",
+        tone === "lime" && "bg-primary text-accent-ink",
+        tone === "ink" && "bg-ink text-ink-inverse",
         className,
       )}
     >
@@ -155,7 +159,7 @@ export function NBScoreBar({ value }: { value: number }) {
   const clamped = Math.max(0, Math.min(100, Math.round(value)));
   return (
     <div
-      className="h-3.5 w-full border-2 border-ink bg-card"
+      className="h-3.5 w-full border-2 border-edge bg-secondary"
       role="progressbar"
       aria-valuenow={clamped}
       aria-valuemin={0}
@@ -164,9 +168,9 @@ export function NBScoreBar({ value }: { value: number }) {
       <div
         className={cn(
           "h-full transition-[width] duration-700 ease-out",
-          clamped >= 70 && "bg-nb-green",
-          clamped >= 40 && clamped < 70 && "bg-primary",
-          clamped < 40 && "bg-destructive",
+          clamped >= 70 && "bg-primary",
+          clamped >= 40 && clamped < 70 && "bg-nb-yellow",
+          clamped < 40 && "bg-nb-red",
         )}
         style={{ width: `${clamped}%` }}
       />
@@ -174,7 +178,7 @@ export function NBScoreBar({ value }: { value: number }) {
   );
 }
 
-// ── Page shell for authenticated pages ──────────────────────────────────────
+// ── Page shell ──────────────────────────────────────────────────────────────
 
 export function NBPageShell({
   children,

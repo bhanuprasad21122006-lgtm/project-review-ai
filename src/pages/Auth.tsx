@@ -98,14 +98,13 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
   return (
     <div className="flex min-h-screen flex-col">
       {/* Top bar */}
-      <header className="border-b-2 border-ink">
+      <header className="border-b-2 border-edge">
         <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 sm:px-6">
-          <Link to="/" className="flex items-center gap-2.5">
-            <span className="flex h-9 w-9 items-center justify-center border-2 border-ink bg-primary nb-shadow-sm">
-              <Gauge className="size-5 text-ink" strokeWidth={2.5} />
+          <Link to="/" className="flex items-center gap-2.5">            <span className="flex h-9 w-9 items-center justify-center border-2 border-edge bg-primary nb-shadow-sm">
+              <Gauge className="size-5 text-accent-ink" strokeWidth={2.5} />
             </span>
             <span className="text-sm font-bold uppercase tracking-wide">
-              AI Project Mentor
+              Project Mentor AI
             </span>
           </Link>
         </div>
@@ -116,12 +115,12 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
         <NBPanel className="w-full max-w-sm">
           {step === "signIn" ? (
             <>
-              <div className="border-b-2 border-ink bg-primary px-6 py-5 text-center">
+              <div className="border-b-2 border-edge bg-primary px-6 py-5 text-center">
                 <div className="flex justify-center">
-                  <span className="flex h-14 w-14 items-center justify-center border-2 border-ink bg-card nb-shadow-sm">
+                  <span className="flex h-14 w-14 items-center justify-center border-2 border-edge bg-card nb-shadow-sm">
                     <img
                       src={logo}
-                      alt="AI Project Mentor logo"
+                      alt="Project Mentor AI logo"
                       width={40}
                       height={40}
                       className="rounded"
@@ -131,7 +130,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                 <h1 className="mt-3 text-xl font-bold uppercase tracking-wide">
                   Get Started
                 </h1>
-                <p className="mt-1 text-xs font-medium text-ink/80">
+                <p className="mt-1 text-xs font-medium text-accent-ink/80">
                   Enter your email to log in or sign up
                 </p>
               </div>
@@ -153,7 +152,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                     </div>
                   </div>
                   {error && (
-                    <p className="border-2 border-ink bg-destructive px-3 py-2 text-xs font-semibold text-white">
+                    <p className="border-2 border-edge bg-nb-red px-3 py-2 text-xs font-semibold text-accent-ink">
                       {error}
                     </p>
                   )}
@@ -176,7 +175,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
 
                   <div className="relative py-1">
                     <div className="absolute inset-0 flex items-center">
-                      <span className="w-full border-t-2 border-ink/20" />
+                      <span className="w-full border-t-2 border-edge" />
                     </div>
                     <div className="relative flex justify-center">
                       <span className="bg-card px-2 text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
@@ -200,11 +199,11 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
             </>
           ) : (
             <>
-              <div className="border-b-2 border-ink bg-nb-purple px-6 py-5 text-center">
-                <h1 className="text-xl font-bold uppercase tracking-wide">
+              <div className="border-b-2 border-edge bg-nb-purple px-6 py-5 text-center">
+                <h1 className="text-xl font-bold uppercase tracking-wide text-accent-ink">
                   Check your email
                 </h1>
-                <p className="mt-1 text-xs font-medium text-ink/80">
+                <p className="mt-1 text-xs font-medium text-accent-ink/80">
                   We&apos;ve sent a code to {step.email}
                 </p>
               </div>
@@ -242,7 +241,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                     </InputOTP>
                   </div>
                   {error && (
-                    <p className="border-2 border-ink bg-destructive px-3 py-2 text-center text-xs font-semibold text-white">
+                    <p className="border-2 border-edge bg-nb-red px-3 py-2 text-center text-xs font-semibold text-accent-ink">
                       {error}
                     </p>
                   )}
@@ -251,7 +250,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                     <button
                       type="button"
                       onClick={() => setStep("signIn")}
-                      className="font-bold text-ink underline underline-offset-2"
+                      className="font-bold text-foreground underline underline-offset-2"
                     >
                       Try again
                     </button>
@@ -277,7 +276,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                     variant="ghost"
                     onClick={() => setStep("signIn")}
                     disabled={isLoading}
-                    className="w-full border-2 border-ink"
+                    className="w-full border-2 border-edge"
                   >
                     Use different email
                   </NBButton>
@@ -286,7 +285,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
             </>
           )}
 
-          <div className="border-t-2 border-ink bg-muted px-6 py-3 text-center text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+          <div className="border-t-2 border-edge bg-muted px-6 py-3 text-center text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
             Secured by freebuff.com
           </div>
         </NBPanel>

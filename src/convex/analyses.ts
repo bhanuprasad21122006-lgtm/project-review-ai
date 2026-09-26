@@ -108,13 +108,13 @@ function buildPrompt(context: string, projectName: string): string {
   ).join("\n");
   return `You are a senior software architect, code reviewer, security reviewer, and academic project mentor.
 
-You are analyzing a student project. Below is the FULL EVIDENCE available to you:
+You are analyzing a software project. Below is the FULL EVIDENCE available to you:
 a file list and the contents of a prioritized subset of files from one GitHub repository.
 
 STRICT RULES:
 1. Base every claim ONLY on the supplied evidence. Never invent files, routes, tests, or features.
 2. If something cannot be established from the evidence, write exactly "Not verifiable from the provided repository data." for that item.
-3. Do not modify code, do not generate code for the student, do not execute anything.
+3. Do not modify code, do not generate code for the submitter, do not execute anything.
 4. Score each category 0-100 from the evidence. Justify each score in one or two sentences.
 
 CATEGORY WEIGHTS (the final health score is computed from these):
@@ -430,7 +430,7 @@ export const start = action({
           projectId: args.projectId,
           userId,
           repoMeta: {
-            fullName: "demo/student-showcase",
+            fullName: "demo/team-showcase",
             description: project.description ?? "Demo project",
             defaultBranch: "main",
             language: "TypeScript",

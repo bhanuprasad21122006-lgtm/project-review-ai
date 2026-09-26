@@ -1,11 +1,11 @@
 {
-  "name": "freebuff.com application",
-  "short_name": "freebuff.com",
-  "description": "freebuff.com application",
+  "name": "Project Mentor AI",
+  "short_name": "Mentor AI",
+  "description": "Analyzes GitHub repositories and returns a transparent health score with evidence-backed findings.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "background_color": "#0b0b0e",
+  "theme_color": "#d8fe52",
   "icons": [
     {
       "src": "/logo.svg",

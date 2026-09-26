@@ -126,8 +126,8 @@ export default function Dashboard() {
         <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
           <NBPanel className="p-5">
             <div className="flex items-center gap-3">
-              <span className="flex h-10 w-10 items-center justify-center border-2 border-ink bg-nb-purple">
-                <FolderGit2 className="size-5 text-ink" />
+              <span className="flex h-10 w-10 items-center justify-center border-2 border-edge bg-nb-purple">
+                <FolderGit2 className="size-5 text-accent-ink" />
               </span>
               <div>
                 <p className="text-2xl font-bold leading-none">
@@ -141,8 +141,8 @@ export default function Dashboard() {
           </NBPanel>
           <NBPanel className="p-5">
             <div className="flex items-center gap-3">
-              <span className="flex h-10 w-10 items-center justify-center border-2 border-ink bg-primary">
-                <Gauge className="size-5 text-ink" />
+              <span className="flex h-10 w-10 items-center justify-center border-2 border-edge bg-primary">
+                <Gauge className="size-5 text-accent-ink" />
               </span>
               <div>
                 <p className="text-2xl font-bold leading-none">
@@ -156,8 +156,8 @@ export default function Dashboard() {
           </NBPanel>
           <NBPanel className="p-5">
             <div className="flex items-center gap-3">
-              <span className="flex h-10 w-10 items-center justify-center border-2 border-ink bg-nb-green">
-                <SquarePlus className="size-5 text-ink" />
+              <span className="flex h-10 w-10 items-center justify-center border-2 border-edge bg-nb-green">
+                <SquarePlus className="size-5 text-accent-ink" />
               </span>
               <div>
                 <p className="text-2xl font-bold leading-none">
@@ -175,8 +175,8 @@ export default function Dashboard() {
         {showForm && (
           <NBPanel className="mb-8">
             <form onSubmit={handleCreate}>
-              <div className="border-b-2 border-ink bg-primary px-5 py-3">
-                <h2 className="text-sm font-bold uppercase tracking-widest">
+              <div className="border-b-2 border-edge bg-primary px-5 py-3">
+                <h2 className="text-sm font-bold uppercase tracking-widest text-accent-ink">
                   New project
                 </h2>
               </div>
@@ -223,7 +223,7 @@ export default function Dashboard() {
                   nothing is ever executed.
                 </p>
                 {error && (
-                  <p className="border-2 border-ink bg-destructive px-3 py-2 text-xs font-semibold text-white">
+                  <p className="border-2 border-edge bg-nb-red px-3 py-2 text-xs font-semibold text-accent-ink">
                     {error}
                   </p>
                 )}
@@ -247,8 +247,8 @@ export default function Dashboard() {
 
         {/* Error banner (demo creation failure) */}
         {!showForm && error && (
-          <p className="mb-8 flex items-center gap-2 border-2 border-ink bg-destructive px-3 py-2 text-xs font-semibold text-white">
-            <TriangleAlert className="size-4" />
+          <p className="mb-8 flex items-center gap-2 border-2 border-edge bg-nb-red px-3 py-2 text-xs font-semibold text-accent-ink">
+            <TriangleAlert className="size-4 text-accent-ink" />
             {error}
           </p>
         )}
@@ -262,8 +262,8 @@ export default function Dashboard() {
           </div>
         ) : projects.length === 0 ? (
           <NBPanel className="flex flex-col items-center px-6 py-14 text-center">
-            <span className="flex h-14 w-14 items-center justify-center border-2 border-ink bg-primary nb-shadow-sm">
-              <FolderGit2 className="size-7 text-ink" />
+            <span className="flex h-14 w-14 items-center justify-center border-2 border-edge bg-primary nb-shadow-sm">
+              <FolderGit2 className="size-7 text-accent-ink" />
             </span>
             <h2 className="mt-4 text-xl font-bold">No projects yet</h2>
             <p className="mt-2 max-w-sm text-sm text-muted-foreground">
@@ -285,7 +285,7 @@ export default function Dashboard() {
             {projects.map((project) => (
               <Link key={project._id} to={`/projects/${project._id}`}>
                 <NBPanel className="h-full transition-[transform,box-shadow] duration-100 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_0_var(--ink)]">
-                  <div className="flex items-start justify-between gap-2 border-b-2 border-ink px-5 py-3">
+                  <div className="flex items-start justify-between gap-2 border-b-2 border-edge px-5 py-3">
                     <h3 className="truncate text-base font-bold">
                       {project.name}
                     </h3>
@@ -325,7 +325,7 @@ export default function Dashboard() {
                         {project.githubOwner}/{project.githubRepo}
                       </p>
                     )}
-                    <p className="mt-3 flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-ink">
+                    <p className="mt-3 flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-foreground">
                       Open
                       <ArrowRight className="size-3.5" />
                     </p>

@@ -32,7 +32,7 @@ const schema = defineSchema(
       role: v.optional(roleValidator), // role of the user. do not remove
     }).index("email", ["email"]), // index for the email. do not remove or modify
 
-    // A student-submitted project. Always owned by exactly one user.
+    // A submitted project. Always owned by exactly one user.
     projects: defineTable({
       userId: v.id("users"),
       name: v.string(),

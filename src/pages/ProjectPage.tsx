@@ -132,7 +132,7 @@ export default function ProjectPage() {
         <AppHeader />
         <main className="mx-auto max-w-3xl px-4 py-16 text-center">
           <NBPanel className="mx-auto max-w-md p-8">
-            <CircleX className="mx-auto size-10 text-destructive" />
+            <CircleX className="mx-auto size-10 text-nb-red" />
             <h1 className="mt-3 text-xl font-bold">Project not found</h1>
             <p className="mt-2 text-sm text-muted-foreground">
               This project doesn't exist or belongs to another account.
@@ -159,7 +159,7 @@ export default function ProjectPage() {
         <div className="mb-6">
           <Link
             to="/dashboard"
-            className="mb-4 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-ink"
+            className="mb-4 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground"
           >
             <ArrowLeft className="size-3.5" />
             All projects
@@ -186,7 +186,7 @@ export default function ProjectPage() {
                   href={project.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground underline underline-offset-2 hover:text-ink"
+                  className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground underline underline-offset-2 hover:text-foreground"
                 >
                   <Github className="size-3.5" />
                   {project.githubOwner}/{project.githubRepo}
@@ -216,8 +216,8 @@ export default function ProjectPage() {
         </div>
 
         {error && (
-          <p className="mb-6 flex items-start gap-2 border-2 border-ink bg-destructive px-4 py-3 text-sm font-semibold text-white">
-            <TriangleAlert className="mt-0.5 size-4 shrink-0" />
+          <p className="mb-6 flex items-start gap-2 border-2 border-edge bg-nb-red px-4 py-3 text-sm font-semibold text-accent-ink">
+            <TriangleAlert className="mt-0.5 size-4 shrink-0 text-accent-ink" />
             {error}
           </p>
         )}
@@ -248,13 +248,13 @@ export default function ProjectPage() {
                         className="flex items-center gap-2.5 text-sm"
                       >
                         {done ? (
-                          <span className="flex h-5 w-5 items-center justify-center border-2 border-ink bg-nb-green">
-                            <Check className="size-3.5 text-ink" strokeWidth={3} />
+                          <span className="flex h-5 w-5 items-center justify-center border-2 border-edge bg-nb-green">
+                            <Check className="size-3.5 text-accent-ink" strokeWidth={3} />
                           </span>
                         ) : active ? (
-                          <Loader2 className="size-5 animate-spin text-ink" />
+                          <Loader2 className="size-5 animate-spin text-primary" />
                         ) : (
-                          <span className="h-5 w-5 border-2 border-ink/30" />
+                          <span className="h-5 w-5 border-2 border-edge opacity-40" />
                         )}
                         <span
                           className={
@@ -278,7 +278,7 @@ export default function ProjectPage() {
 
         {/* Failed state */}
         {analysis?.status === "failed" && !isRunning && (
-          <NBPanel className="mb-6 border-2 border-ink bg-destructive/10 p-5">
+          <NBPanel className="mb-6 border-2 border-edge bg-nb-red/10 p-5">
             <p className="flex items-center gap-2 text-sm font-bold">
               <CircleAlert className="size-4" />
               Last analysis failed
@@ -295,8 +295,8 @@ export default function ProjectPage() {
           !isRunning &&
           analysis?.status !== "failed" && (
             <NBPanel className="flex flex-col items-center px-6 py-14 text-center">
-              <span className="flex h-14 w-14 items-center justify-center border-2 border-ink bg-primary nb-shadow-sm">
-                <FileSearch className="size-7 text-ink" />
+              <span className="flex h-14 w-14 items-center justify-center border-2 border-edge bg-primary nb-shadow-sm">
+                <FileSearch className="size-7 text-accent-ink" />
               </span>
               <h2 className="mt-4 text-xl font-bold">Ready to analyze</h2>
               <p className="mt-2 max-w-sm text-sm text-muted-foreground">
@@ -321,7 +321,7 @@ export default function ProjectPage() {
         {result && !isRunning && (
           <div className="space-y-6">
             {analysis?.isDemo && (
-              <p className="border-2 border-ink bg-nb-purple px-4 py-2.5 text-center text-xs font-bold uppercase tracking-widest text-ink">
+              <p className="border-2 border-edge bg-nb-purple px-4 py-2.5 text-center text-xs font-bold uppercase tracking-widest text-accent-ink">
                 Demo analysis — prepared sample data, not a live repository scan
               </p>
             )}
@@ -343,14 +343,14 @@ export default function ProjectPage() {
                 <div className="mt-4">
                   <NBScoreBar value={result.score} />
                 </div>
-                <p className="mt-4 border-2 border-ink bg-primary px-3 py-2 text-sm font-bold">
+                <p className="mt-4 border-2 border-edge bg-primary px-3 py-2 text-sm font-bold text-accent-ink">
                   {result.verdict}
                 </p>
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
                   {result.summary}
                 </p>
                 {analysis?.repoMeta && (
-                  <p className="mt-4 border-t-2 border-ink pt-3 text-xs font-semibold text-muted-foreground">
+                  <p className="mt-4 border-t-2 border-edge pt-3 text-xs font-semibold text-muted-foreground">
                     {analysis.repoMeta.scannedFileCount} files scanned ·{" "}
                     {analysis.repoMeta.language ?? "language unknown"} ·{" "}
                     {analysis.repoMeta.defaultBranch} branch
@@ -389,8 +389,8 @@ export default function ProjectPage() {
             <div className="grid gap-6 md:grid-cols-2">
               <NBPanel className="p-6">
                 <p className="mb-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest">
-                  <span className="flex h-6 w-6 items-center justify-center border-2 border-ink bg-nb-green">
-                    <ThumbsUp className="size-3.5 text-ink" />
+                  <span className="flex h-6 w-6 items-center justify-center border-2 border-edge bg-nb-green">
+                    <ThumbsUp className="size-3.5 text-accent-ink" />
                   </span>
                   Strengths
                 </p>
@@ -406,7 +406,7 @@ export default function ProjectPage() {
                         initial={{ opacity: 0, y: 8 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: i * 0.06 }}
-                        className="border-2 border-ink bg-card p-3.5"
+                        className="border-2 border-edge bg-card p-3.5"
                       >
                         <p className="text-sm font-bold">{s.title}</p>
                         <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
@@ -431,8 +431,8 @@ export default function ProjectPage() {
 
               <NBPanel className="p-6">
                 <p className="mb-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest">
-                  <span className="flex h-6 w-6 items-center justify-center border-2 border-ink bg-destructive">
-                    <CircleAlert className="size-3.5 text-white" />
+                  <span className="flex h-6 w-6 items-center justify-center border-2 border-edge bg-nb-red">
+                    <CircleAlert className="size-3.5 text-accent-ink" />
                   </span>
                   Weaknesses
                 </p>
@@ -448,7 +448,7 @@ export default function ProjectPage() {
                         initial={{ opacity: 0, y: 8 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: i * 0.06 }}
-                        className="border-2 border-ink bg-card p-3.5"
+                        className="border-2 border-edge bg-card p-3.5"
                       >
                         <div className="flex flex-wrap items-center justify-between gap-2">
                           <p className="text-sm font-bold">{w.title}</p>
@@ -494,7 +494,7 @@ export default function ProjectPage() {
                 <ol className="mt-4 space-y-2.5">
                   {result.nextSteps.map((step, i) => (
                     <li key={step} className="flex items-start gap-3">
-                      <span className="flex h-6 w-6 shrink-0 items-center justify-center border-2 border-ink bg-ink font-mono text-xs font-bold text-primary">
+                      <span className="flex h-6 w-6 shrink-0 items-center justify-center border-2 border-edge bg-ink font-mono text-xs font-bold text-primary">
                         {i + 1}
                       </span>
                       <span className="text-sm leading-relaxed">{step}</span>
