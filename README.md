@@ -1,293 +1,242 @@
+# Project Mentor AI
+
+**Understand. Analyze. Improve.**
+
+Project Mentor AI reads a GitHub repository, scores it across nine weighted
+engineering categories, and reports exactly what is strong, what is weak, and
+what to fix first — with file-level evidence behind every claim.
+
+It is **not** a code generator. It never modifies, executes, or builds the
+repositories it reviews. Its only job is to read, understand, and evaluate.
+
+---
+
 ## Overview
 
-This project uses the following tech stack:
-- Vite
-- Typescript
-- React Router v7 (all imports from `react-router` instead of `react-router-dom`)
-- React 19 (for frontend components)
-- Tailwind v4 (for styling)
-- Shadcn UI (for UI components library)
-- Lucide Icons (for icons)
-- Convex (for backend & database)
-- Convex Auth (for authentication)
-- Framer Motion (for animations)
-- Three js (for 3d models)
+Project Mentor AI is an internal team tool for reviewing software projects.
+A team member signs in, submits a public GitHub repository URL, and receives:
 
-All relevant files live in the 'src' directory.
+- a transparent **health score** (0–100) computed from nine weighted categories,
+- **strengths** and **weaknesses** with severity ratings and file evidence,
+- a prioritized list of **what to fix first**.
 
-Use bun for the package manager.
+Every analysis is tied to the account that created it. Team members only ever
+see their own projects and results.
 
-## Setup
-
-This project is set up already and running on a cloud environment, as well as a convex development in the sandbox.
-
-## Environment Variables
-
-The project is set up with project specific CONVEX_DEPLOYMENT and VITE_CONVEX_URL environment variables on the client side.
-
-The convex server has a separate set of environment variables that are accessible by the convex backend.
-
-Currently, these variables include auth-specific keys: JWKS, JWT_PRIVATE_KEY, and SITE_URL.
-
-
-# Using Authentication (Important!)
-
-You must follow these conventions when using authentication.
-
-## Auth is already set up.
-
-All convex authentication functions are already set up. The auth currently uses email OTP and anonymous users, but can support more.
-
-The email OTP configuration is defined in `src/convex/auth/emailOtp.ts`. DO NOT MODIFY THIS FILE.
-
-Also, DO NOT MODIFY THESE AUTH FILES: `src/convex/auth.config.ts` and `src/convex/auth.ts`.
-
-## Using Convex Auth on the backend
-
-On the `src/convex/users.ts` file, you can use the `getCurrentUser` function to get the current user's data.
-
-## Using Convex Auth on the frontend
-
-The `/auth` page is already set up to use auth. Navigate to `/auth` for all log in / sign up sequences.
-
-You MUST use this hook to get user data. Never do this yourself without the hook:
-```typescript
-import { useAuth } from "@/hooks/use-auth";
-
-const { isLoading, isAuthenticated, user, signIn, signOut } = useAuth();
-```
-
-## Protected Routes
-
-The starter `/dashboard` route is protected with `RequireAuth`. Extend that page
-for the product's authenticated experience, and reuse `RequireAuth` when adding
-another protected route — do NOT hand-roll a redirect to `/auth`, since landing
-on a bare sign-in form with no explanation of what was blocked is confusing.
-
-`RequireAuth` states the block on the page the visitor asked for and sends them
-to `/auth?returnTo=<current route>` when they choose to sign in, so they come
-back to it. Pass `title` and `description` to say what the page is:
-
-```tsx
-<Route
-  path="/dashboard"
-  element={
-    <RequireAuth
-      title="Sign in to view your dashboard"
-      description="Your projects and settings live here."
-    >
-      <Dashboard />
-    </RequireAuth>
-  }
-/>
-```
-
-Pass `redirectImmediately` for a route where bouncing straight to `/auth` really
-is better.
-
-## Auth Page
-
-The auth page is defined in `src/pages/Auth.tsx`. Send sign-in and sign-up actions
-to `/auth`.
-
-## Authorization
-
-You can perform authorization checks on the frontend and backend.
-
-On the frontend, you can use the `useAuth` hook to get the current user's data and authentication state.
-
-You should also be protecting queries, mutations, and actions at the base level, checking for authorization securely.
-
-## Adding a redirect after auth
-
-The `/auth` route in `src/main.tsx` redirects to `/dashboard` by default. If the
-product's main authenticated route is different, update `redirectAfterAuth` to
-that route. A validated same-origin `returnTo` query parameter takes priority so
-users can resume the protected page they originally requested. Never leave an
-authenticated product redirecting back to the public landing page.
-
-## Complete authenticated products
-
-When the requested product implies accounts, a workspace, a dashboard, or other
-signed-in functionality, the task is not complete with only a landing page and
-auth form. Build the main authenticated experience, protect its route, and verify
-that signing in reaches it.
-
-# Frontend Conventions
-
-You will be using the Vite frontend with React 19, Tailwind v4, and Shadcn UI.
-
-Generally, pages should be in the `src/pages` folder, and components should be in the `src/components` folder.
-
-Shadcn primitives are located in the `src/components/ui` folder and should be used by default.
-
-## Page routing
-
-Your page component should go under the `src/pages` folder.
-
-When adding a page, update the react router configuration in `src/main.tsx` to include the new route you just added.
-
-## Shad CN conventions
-
-Follow these conventions when using Shad CN components, which you should use by default.
-- Remember to use "cursor-pointer" to make the element clickable
-- For title text, use the "tracking-tight font-bold" class to make the text more readable
-- Always make apps MOBILE RESPONSIVE. This is important
-- AVOID NESTED CARDS. Try and not to nest cards, borders, components, etc. Nested cards add clutter and make the app look messy.
-- AVOID SHADOWS. Avoid adding any shadows to components. stick with a thin border without the shadow.
-- Avoid skeletons; instead, use the loader2 component to show a spinning loading state when loading data.
-
-
-## Landing Pages
-
-You must always create good-looking designer-level styles to your application. 
-- Make it well animated and fit a certain "theme", ie neo brutalist, retro, neumorphism, glass morphism, etc
-
-Use known images and emojis from online.
-
-If the user is logged in already, show the get started button to say "Dashboard" or "Profile" instead to take them there.
-
-## Responsiveness and formatting
-
-Make sure pages are wrapped in a container to prevent the width stretching out on wide screens. Always make sure they are centered aligned and not off-center.
-
-Always make sure that your designs are mobile responsive. Verify the formatting to ensure it has correct max and min widths as well as mobile responsiveness.
-
-- Always create sidebars for protected dashboard pages and navigate between pages
-- Always create navbars for landing pages
-- On these bars, the created logo should be clickable and redirect to the index page
-
-## Animating with Framer Motion
-
-You must add animations to components using Framer Motion. It is already installed and configured in the project.
-
-To use it, import the `motion` component from `framer-motion` and use it to wrap the component you want to animate.
-
-
-### Other Items to animate
-- Fade in and Fade Out
-- Slide in and Slide Out animations
-- Rendering animations
-- Button clicks and UI elements
-
-Animate for all components, including on landing page and app pages.
-
-## Three JS Graphics
-
-Your app comes with three js by default. You can use it to create 3D graphics for landing pages, games, etc.
-
-
-## Colors
-
-You can override colors in: `src/index.css`
-
-This uses the oklch color format for tailwind v4.
-
-Always use these color variable names.
-
-Make sure all ui components are set up to be mobile responsive and compatible with both light and dark mode.
-
-Set theme using `dark` or `light` variables at the parent className.
-
-## Styling and Theming
-
-When changing the theme, always change the underlying theme of the shad cn components app-wide under `src/components/ui` and the colors in the index.css file.
-
-Avoid hardcoding in colors unless necessary for a use case, and properly implement themes through the underlying shad cn ui components.
-
-When styling, ensure buttons and clickable items have pointer-click on them (don't by default).
-
-Always follow a set theme style and ensure it is tuned to the user's liking.
-
-## Toasts
-
-You should always use toasts to display results to the user, such as confirmations, results, errors, etc.
-
-Use the shad cn Sonner component as the toaster. For example:
+### The pipeline
 
 ```
-import { toast } from "sonner"
-
-import { Button } from "@/components/ui/button"
-export function SonnerDemo() {
-  return (
-    <Button
-      variant="outline"
-      onClick={() =>
-        toast("Event has been created", {
-          description: "Sunday, December 03, 2023 at 9:00 AM",
-          action: {
-            label: "Undo",
-            onClick: () => console.log("Undo"),
-          },
-        })
-      }
-    >
-      Show Toast
-    </Button>
-  )
-}
+Sign in
+  → Create project (GitHub URL)
+  → Read-only repository scan (prioritized, capped)
+  → Project context packed
+  → AI analysis (your own key, or the built-in engine)
+  → Validated structured result
+  → Weighted health score
+  → Strengths · Weaknesses · Priorities
 ```
 
-Remember to import { toast } from "sonner". Usage: `toast("Event has been created.")`
+### Scoring model
 
-## Dialogs
+| Category          | Weight |
+| ----------------- | ------ |
+| Architecture      | 15%    |
+| Code Quality      | 15%    |
+| Security          | 15%    |
+| Problem Definition| 10%    |
+| Database          | 10%    |
+| Testing           | 10%    |
+| Documentation     | 10%    |
+| Innovation        | 10%    |
+| UX                | 5%     |
 
-Always ensure your larger dialogs have a scroll in its content to ensure that its content fits the screen size. Make sure that the content is not cut off from the screen.
+Category scores come from the AI (or the heuristic engine) and are clamped to
+0–100 before the weighted average is computed, so a malformed response can
+never produce an invalid score.
 
-Ideally, instead of using a new page, use a Dialog instead. 
+---
 
-# Using the Convex backend
+## Features
 
-You will be implementing the convex backend. Follow your knowledge of convex and the documentation to implement the backend.
+- **Email sign-in / sign-up** — one-time codes, plus a guest mode for quick
+  trials. Real accounts, no passwords stored.
+- **Project dashboard** — project cards with latest score, run counts, and a
+  quick-create form.
+- **Repository scan** — the backend reads the repo over the GitHub API:
+  prioritized file selection (README and manifests first, then entry points,
+  routes, services, components, schemas, tests), hard caps (50 files, 48 KB
+  per file, 320 KB total), ignored directories (`node_modules`, `dist`,
+  `.git`, …), and secret files (`.env` and friends) never fetched.
+- **AI analysis** — evidence-only prompting: the model must ground every
+  claim in the supplied context, respond in strict JSON, and mark anything it
+  cannot establish as not verifiable. The response is validated and clamped
+  before storage.
+- **Bring your own key** — each user can save a personal AI key for Google
+  Gemini, OpenAI (ChatGPT), Anthropic Claude, or OpenRouter (any of 100+
+  models). Keys are stored server-side, never displayed again, and used only
+  for that user's analyses.
+- **Engine transparency** — every result shows which engine produced it
+  (your key's provider, "Built-in AI", or an unlabeled heuristic run).
+- **Demo mode** — a prepared sample analysis, clearly labeled as demo data,
+  so the full flow can be explored with no external dependencies.
+- **Admin area** — one-time bootstrap claim for the first admin, then member
+  role management (user / member / admin), workspace stats, and a list of all
+  projects. Admin functions re-verify the caller's role server-side.
 
-## The Convex Schema
+### AI engine priority
 
-You must correctly follow the convex schema implementation.
+Each analysis uses the first available engine:
 
-The schema is defined in `src/convex/schema.ts`.
+1. the **user's own key** (Gemini / OpenAI / Claude / OpenRouter),
+2. the server's `GEMINI_API_KEY`, if configured,
+3. the **platform gateway** (built-in AI, when authorized),
+4. a **deterministic heuristic** scan (structure and configuration signals;
+   always available and honestly labeled as not an AI review).
 
-Do not include the `_id` and `_creationTime` fields in your queries (it is included by default for each table).
-Do not index `_creationTime` as it is indexed for you. Never have duplicate indexes.
+A missing or invalid key never fails a run — it degrades to the next tier.
 
+---
 
-## Convex Actions: Using CRUD operations
+## Security architecture
 
-When running anything that involves external connections, you must use a convex action with "use node" at the top of the file.
+- **Data isolation** — every query and mutation is ownership-scoped. Requesting
+  another user's project returns "not found", never its data.
+- **Key handling** — API keys are write-only from the client's perspective:
+  save, status, and remove only. No query returns key material; clients see a
+  masked preview such as `AIza…3f9a`. Provider calls happen exclusively in
+  server-side actions.
+- **Repository safety** — repository contents are treated as data. Code is
+  never executed, dependencies are never installed, and shell commands are
+  never derived from repository content. File reads are capped and filtered.
+- **Input validation** — GitHub URLs must be `https://github.com/owner/repo`
+  (other hosts, non-https schemes, and reserved namespaces such as
+  `github.com/topics/...` are rejected); text fields are length-bounded;
+  errors are mapped to friendly messages with no stack traces or internals.
 
-You cannot have queries or mutations in the same file as a "use node" action file. Thus, you must use pre-built queries and mutations in other files.
+---
 
-You can also use the pre-installed internal crud functions for the database:
+## Technology stack
 
-```ts
-// in convex/users.ts
-import { crud } from "convex-helpers/server/crud";
-import schema from "./schema.ts";
+- **Frontend:** React 19, Vite, TypeScript, React Router, Tailwind CSS 4,
+  shadcn/ui, Framer Motion
+- **Backend & database:** Convex (queries, mutations, actions) with Convex
+  Auth (email OTP + anonymous)
+- **AI:** direct provider calls — Google Gemini, OpenAI, Anthropic Claude,
+  OpenRouter — plus a platform gateway and a heuristic fallback
+- **Testing:** Bun's built-in test runner
+- **Theme:** dark premium neobrutalism — square corners, hard edges, offset
+  shadows, flat color blocks, lime accent (Space Grotesk + JetBrains Mono)
 
-export const { create, read, update, destroy } = crud(schema, "users");
+---
 
-// in some file, in an action:
-const user = await ctx.runQuery(internal.users.read, { id: userId });
+## Project structure
 
-await ctx.runMutation(internal.users.update, {
-  id: userId,
-  patch: {
-    status: "inactive",
-  },
-});
+```
+├── index.html                  # entry, fonts, metadata
+├── src/
+│   ├── main.tsx                # router and providers
+│   ├── index.css               # theme tokens and utilities
+│   ├── pages/
+│   │   ├── Landing.tsx         # public marketing page
+│   │   ├── Auth.tsx            # email-otp sign-in / sign-up
+│   │   ├── Dashboard.tsx       # project list, create, demo
+│   │   ├── ProjectPage.tsx     # analysis view (score, findings)
+│   │   ├── AdminPage.tsx       # admin area
+│   │   ├── SettingsPage.tsx    # bring-your-own-key settings
+│   │   └── NotFound.tsx
+│   ├── components/
+│   │   ├── nb.tsx              # neobrutalism UI kit
+│   │   ├── AppHeader.tsx       # authenticated top bar
+│   │   ├── RequireAuth.tsx     # route protection
+│   │   └── ui/                 # shadcn primitives
+│   ├── convex/
+│   │   ├── schema.ts           # users, projects, analyses, aiKeys
+│   │   ├── projects.ts         # project CRUD (ownership-scoped)
+│   │   ├── analyses.ts         # scan + AI analysis action
+│   │   ├── analysesStore.ts    # analysis storage and queries
+│   │   ├── aiKeys.ts           # BYOK save/status/remove
+│   │   ├── admin.ts            # role management and stats
+│   │   └── lib/
+│   │       ├── repo.ts         # URL parsing, file selection, context
+│   │       ├── scoring.ts      # weighted score calculation
+│   │       └── aiProviders.ts  # provider catalog and API calls
+│   └── hooks/use-auth.ts
+├── tests/
+│   ├── repo.test.ts            # URL + file-selection security tests
+│   ├── scoring.test.ts         # score math tests
+│   └── aiProviders.test.ts     # provider catalog tests
+└── package.json
 ```
 
+---
 
-## Common Convex Mistakes To Avoid
+## Getting started
 
-When using convex, make sure:
-- Document IDs are referenced as `_id` field, not `id`.
-- Document ID types are referenced as `Id<"TableName">`, not `string`.
-- Document object types are referenced as `Doc<"TableName">`.
-- Keep schemaValidation to false in the schema file.
-- You must correctly type your code so that it passes the type checker.
-- You must handle null / undefined cases of your convex queries for both frontend and backend, or else it will throw an error that your data could be null or undefined.
-- Always use the `@/folder` path, with `@/convex/folder/file.ts` syntax for importing convex files.
-- This includes importing generated files like `@/convex/_generated/server`, `@/convex/_generated/api`
-- Remember to import functions like useQuery, useMutation, useAction, etc. from `convex/react`
-- NEVER have return type validators.
+Requirements: [Bun](https://bun.sh) 1.1+.
+
+```bash
+bun install
+bun run dev          # frontend + Convex dev functions
+```
+
+The app runs at `http://localhost:5173`. The first Convex push creates the
+tables automatically.
+
+### Environment variables
+
+| Variable             | Required | Purpose                                            |
+| -------------------- | -------- | -------------------------------------------------- |
+| `GEMINI_API_KEY`     | no       | Server-wide Gemini analysis (tier 2 engine)         |
+| `GITHUB_TOKEN`       | no       | Raises GitHub API limits from ~60 to 5,000 req/hour |
+
+Users supply their own keys through the app's **AI key** settings page — no
+key configuration is required to run the project. Secret files (`.env`,
+`.env.local`) are never committed and never fetched from scanned repositories.
+
+### Scripts
+
+```bash
+bun run dev          # development server
+bun test tests/      # unit tests (45 tests)
+bunx tsc -b --noEmit # typecheck
+bun run build        # production build
+```
+
+---
+
+## Testing
+
+```bash
+bun test tests/
+```
+
+- **`repo.test.ts`** — GitHub URL parsing (protocol/host/path rules, reserved
+  namespaces), file selection (ignored directories, secret-file blocking,
+  binary exclusion, caps), and context packing.
+- **`scoring.test.ts`** — weight sums, clamping, severity fallbacks, weighted
+  averaging, renormalization with missing categories, unknown-key rejection.
+- **`aiProviders.test.ts`** — catalog completeness, key masking guarantees,
+  and key sanity validation.
+
+---
+
+## Current limitations
+
+- **Public repositories only.** Private repos are rejected with a clear
+  message; token-based private access is planned.
+- **Latest analysis per project** — the UI shows the most recent run; a
+  browsable history is planned.
+- **Single key per user** — one AI key at a time; switching providers
+  replaces it.
+- Roadmap tracking, viva practice, and a project-aware chat are not part of
+  this version.
+
+---
+
+## Responsible AI use
+
+The analysis engine is instructed to ground every claim in repository
+evidence, to mark anything unverifiable explicitly, and never to fabricate
+files, routes, or features. Results are decision support for reviewers — not
+a substitute for human judgment — and every finding can be checked against
+the cited file paths.
