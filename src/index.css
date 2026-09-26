@@ -1,0 +1,221 @@
+/* DO NOT CHANGE */
+@import "tailwindcss";
+@import "tw-animate-css";
+@custom-variant dark (&:is(.dark *));
+
+/* DO NOT CHANGE */
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--accent);
+  --color-sidebar-accent-foreground: var(--accent-foreground);
+  --color-sidebar-border: var(--border);
+  --color-sidebar-ring: var(--ring);
+
+  /* neobrutalism accent palette */
+  --color-nb-yellow: var(--nb-yellow);
+  --color-nb-green: var(--nb-green);
+  --color-nb-blue: var(--nb-blue);
+  --color-nb-red: var(--nb-red);
+  --color-nb-purple: var(--nb-purple);
+  --color-ink: var(--ink);
+
+  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+/* THEME — Neobrutalism Minimalism: flat blocks, hard black borders, offset shadows */
+:root {
+  --radius: 0rem;
+  --background: #f5f2ea; /* warm paper */
+  --foreground: #111111;
+  --card: #ffffff;
+  --card-foreground: #111111;
+  --popover: #ffffff;
+  --popover-foreground: #111111;
+  --primary: #ffd23f; /* signal yellow */
+  --primary-foreground: #111111;
+  --secondary: #f5f2ea;
+  --secondary-foreground: #111111;
+  --muted: #eae6da;
+  --muted-foreground: #55524a;
+  --accent: #a8b5ff; /* soft violet block */
+  --accent-foreground: #111111;
+  --destructive: #e4572e; /* flat red-orange */
+  --border: #111111;
+  --input: #111111;
+  --ring: #111111;
+  --chart-1: #ffd23f;
+  --chart-2: #3f88ff;
+  --chart-3: #a8b5ff;
+  --chart-4: #3ecf6e;
+  --chart-5: #e4572e;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #111111;
+  --sidebar-primary: #ffd23f;
+  --sidebar-primary-foreground: #111111;
+  --sidebar-accent: #a8b5ff;
+  --accent-foreground: #111111;
+
+  /* neobrutalism accent blocks */
+  --nb-yellow: #ffd23f;
+  --nb-green: #3ecf6e;
+  --nb-blue: #3f88ff;
+  --nb-red: #e4572e;
+  --nb-purple: #a8b5ff;
+  --ink: #111111;
+}
+
+.dark {
+  --background: #1c1c19;
+  --foreground: #f5f2ea;
+  --card: #262622;
+  --card-foreground: #f5f2ea;
+  --popover: #262622;
+  --popover-foreground: #f5f2ea;
+  --primary: #ffd23f;
+  --primary-foreground: #111111;
+  --secondary: #2e2e29;
+  --secondary-foreground: #f5f2ea;
+  --muted: #2e2e29;
+  --muted-foreground: #a5a298;
+  --accent: #a8b5ff;
+  --accent-foreground: #111111;
+  --destructive: #e4572e;
+  --border: #f5f2ea;
+  --input: #f5f2ea;
+  --ring: #f5f2ea;
+  --chart-1: #ffd23f;
+  --chart-2: #3f88ff;
+  --chart-3: #a8b5ff;
+  --chart-4: #3ecf6e;
+  --chart-5: #e4572e;
+  --sidebar: #262622;
+  --sidebar-foreground: #f5f2ea;
+  --sidebar-primary: #4b4b45;
+  --sidebar-primary-foreground: #f5f2ea;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    background-image: radial-gradient(#11111112 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+  .dark body {
+    background-image: radial-gradient(#f5f2ea12 1px, transparent 1px);
+  }
+  button:not([disabled]),
+  [role="button"]:not([disabled]) {
+    cursor: pointer;
+  }
+  ::selection {
+    background: #ffd23f;
+    color: #111111;
+  }
+}
+
+/* ── Neobrutalism helpers ─────────────────────────────────────────────── */
+
+/* Signature hard offset shadow */
+.nb-shadow {
+  box-shadow: 4px 4px 0 0 var(--ink);
+}
+.nb-shadow-lg {
+  box-shadow: 7px 7px 0 0 var(--ink);
+}
+.nb-shadow-sm {
+  box-shadow: 2px 2px 0 0 var(--ink);
+}
+.dark .nb-shadow,
+.dark .nb-shadow-lg,
+.dark .nb-shadow-sm {
+  box-shadow: 4px 4px 0 0 #000;
+}
+
+/* Pressable block — used for buttons/cards that should feel tactile */
+.nb-press {
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+.nb-press:hover {
+  transform: translate(-2px, -2px);
+}
+.nb-press:active {
+  transform: translate(2px, 2px);
+}
+.nb-press:hover.nb-shadow {
+  box-shadow: 6px 6px 0 0 var(--ink);
+}
+.dark .nb-press:hover.nb-shadow {
+  box-shadow: 6px 6px 0 0 #000;
+}
+.nb-press:active.nb-shadow {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 0 var(--ink);
+}
+
+/* Flat colored block with border */
+.nb-block {
+  border: 2px solid var(--ink);
+}
+
+/* Squared, hard-edged scrollbar */
+.nb-scroll::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.nb-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.nb-scroll::-webkit-scrollbar-thumb {
+  background: var(--ink);
+  border: 2px solid var(--background);
+}
+
+/* Marquee strip */
+@keyframes nb-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.nb-marquee {
+  display: flex;
+  width: max-content;
+  animation: nb-marquee 28s linear infinite;
+}
