@@ -18,6 +18,7 @@ import { Link, useParams } from "react-router";
 import { AppHeader } from "@/components/AppHeader";
 import { NBBadge, NBButton, NBPanel, NBScoreBar } from "@/components/nb";
 import { api } from "@/convex/_generated/api";
+import { AI_PROVIDER_INFO, type AIProvider } from "@/convex/lib/aiProviders";
 import type { Id } from "@/convex/_generated/dataModel";
 import { useAuth } from "@/hooks/use-auth";
 
@@ -79,6 +80,7 @@ export default function ProjectPage() {
   );
   const markFailed = useMutation(api.analysesStore.markFailed);
   const startAnalysis = useAction(api.analyses.start);
+  const keyStatus = useQuery(api.aiKeys.status, {});
 
   const [running, setRunning] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -304,6 +306,19 @@ export default function ProjectPage() {
                   ? "Run the demo to see a full analysis with prepared sample data."
                   : "We'll read the repository and score it across nine categories."}
               </p>
+              {project.source !== "demo" && keyStatus && !keyStatus.hasKey && (
+                <p className="mt-5 border-2 border-edge bg-secondary px-3 py-2 text-xs text-muted-foreground">
+                  Running on the built-in engine. For sharper, model-powered
+                  reviews,{" "}
+                  <Link
+                    to="/settings"
+                    className="font-bold text-primary underline underline-offset-2"
+                  >
+                    add your AI key
+                  </Link>
+                  .
+                </p>
+              )}
               <NBButton
                 variant="primary"
                 className="mt-6"
@@ -329,9 +344,26 @@ export default function ProjectPage() {
             {/* Score */}
             <div className="grid gap-6 md:grid-cols-[0.9fr_1.1fr]">
               <NBPanel className="p-6">
-                <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
-                  Project Health
-                </p>
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                    Project Health
+                  </p>
+                  {analysis?.aiEngine && analysis.aiEngine !== "heuristic" && (
+                    <NBBadge tone="lime">
+                      {analysis.aiEngine === "gemini"
+                        ? "Gemini"
+                        : analysis.aiEngine === "openai"
+                          ? "OpenAI"
+                          : analysis.aiEngine === "claude"
+                            ? "Claude"
+                            : analysis.aiEngine === "openrouter"
+                              ? "OpenRouter"
+                              : analysis.aiEngine === "gateway"
+                                ? "Built-in AI"
+                                : analysis.aiEngine}
+                    </NBBadge>
+                  )}
+                </div>
                 <div className="mt-3 flex items-end gap-2">
                   <span className="text-7xl font-bold leading-none tracking-tight">
                     {animatedScore}

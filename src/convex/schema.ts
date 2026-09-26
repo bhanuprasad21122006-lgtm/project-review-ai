@@ -49,8 +49,28 @@ const schema = defineSchema(
       .index("by_user", ["userId"])
       .index("by_user_and_repo", ["userId", "githubOwner", "githubRepo"]),
 
+    // User-supplied AI API keys (bring-your-own-key). The key material is
+    // write-only from the client's perspective: save/remove/status only,
+    // never returned to any client query.
+    aiKeys: defineTable({
+      userId: v.id("users"),
+      provider: v.union(
+        v.literal("gemini"),
+        v.literal("openai"),
+        v.literal("claude"),
+        v.literal("openrouter"),
+      ),
+      keyEncrypted: v.string(), // key material; never exposed via public queries
+      keyPreview: v.string(), // e.g. "AIza…3f9a" for UI status display
+      model: v.optional(v.string()),
+      updatedAt: v.number(),
+    }).index("by_user", ["userId"]),
+
     // One AI analysis run per project. Stored context + findings.
     analyses: defineTable({
+      // Which AI tier produced the stored result:
+      // "gemini" | "openai" | "claude" | "openrouter" | "gateway" | "heuristic"
+      aiEngine: v.optional(v.string()),
       userId: v.id("users"),
       projectId: v.id("projects"),
       status: v.union(

@@ -51,6 +51,7 @@ export const completeInternal = internalMutation({
     projectId: v.id("projects"),
     userId: v.id("users"),
     analysisId: v.optional(v.id("analyses")),
+    aiEngine: v.optional(v.string()),
     repoMeta: v.optional(
       v.object({
         fullName: v.string(),
@@ -108,6 +109,7 @@ export const completeInternal = internalMutation({
     await ctx.db.patch(analysisId, {
       status: "complete",
       stage: "complete",
+      ...(args.aiEngine ? { aiEngine: args.aiEngine } : {}),
       ...(args.repoMeta ? { repoMeta: args.repoMeta } : {}),
       result: args.result,
     });

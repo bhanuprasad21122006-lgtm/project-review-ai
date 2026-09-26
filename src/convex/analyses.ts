@@ -27,6 +27,7 @@ import {
   clampSeverity,
 } from "./lib/scoring";
 import { vly } from "../lib/vly-integrations";
+import { callProvider, type AIProvider } from "./lib/aiProviders";
 
 /**
  * AI completion through the platform gateway (already configured for this
@@ -549,13 +550,17 @@ export const start = action({
       stage: "analyzing",
     });
 
-    // Stage 2: analyze with AI — Gemini when a key is set, otherwise the
-    // platform AI gateway (already configured for this deployment). The
-    // deterministic heuristic is the last-resort fallback so a run never
-    // hard-fails on AI availability.
-    const apiKey = process.env.GEMINI_API_KEY;
+    // Stage 2: analyze with AI, in priority order:
+    //   1. the user's own key (bring-your-own-key),
+    //   2. the server's Gemini key, if configured,
+    //   3. the platform gateway, if authorized,
+    //   4. the deterministic heuristic (always available).
+    const userKeyRow = await ctx.runMutation(internal.aiKeys.getInternal, {
+      userId,
+    });
+    const serverKey = process.env.GEMINI_API_KEY;
     let analysis: ValidatedAnalysis;
-    let aiPath: "gemini" | "gateway" | "heuristic" = "heuristic";
+    let aiPath: string = "heuristic";
     const buildContext = () =>
       packProjectContext(
         {
@@ -568,46 +573,54 @@ export const start = action({
         files,
         allPaths,
       );
-    if (apiKey) {
-      const context = buildContext();
-      const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            contents: [{ parts: [{ text: buildPrompt(context, project.name) }] }],
-            generationConfig: { temperature: 0.2, maxOutputTokens: 4096 },
-          }),
-        },
+
+    const promptText = () => buildPrompt(buildContext(), project.name);
+    analysis = null as never;
+    try {
+      if (userKeyRow && userKeyRow.provider && userKeyRow.keyEncrypted) {
+        const text = await callProvider(
+          userKeyRow.provider as AIProvider,
+          userKeyRow.keyEncrypted,
+          userKeyRow.model || undefined,
+          promptText(),
+        );
+        if (text) {
+          analysis = validateAnalysis(extractJson(text));
+          aiPath = userKeyRow.provider as string;
+        }
+      }
+    } catch {
+      // fall through to server-side options
+    }
+    if (!analysis && serverKey) {
+      const text = await callProvider(
+        "gemini",
+        serverKey,
+        GEMINI_MODEL,
+        promptText(),
       );
-      if (!res.ok) throw new Error("AI_REQUEST_FAILED");
-      const data = await res.json();
-      const text: string | undefined =
-        data?.candidates?.[0]?.content?.parts
-          ?.map((p: any) => p?.text)
-          .filter(Boolean)
-          .join("") ?? undefined;
-      if (!text) throw new Error("AI_RESPONSE_MALFORMED");
-      analysis = validateAnalysis(extractJson(text));
-      aiPath = "gemini";
-    } else {
-      const gatewayText = await gatewayCompletion(
-        buildPrompt(buildContext(), project.name),
-      );
+      if (text) {
+        analysis = validateAnalysis(extractJson(text));
+        aiPath = "gemini";
+      }
+    }
+    if (!analysis) {
+      const gatewayText = await gatewayCompletion(promptText());
       if (gatewayText) {
         analysis = validateAnalysis(extractJson(gatewayText));
         aiPath = "gateway";
-      } else {
-        analysis = buildHeuristicAnalysis(files, allPaths, project.name);
-        aiPath = "heuristic";
       }
+    }
+    if (!analysis) {
+      analysis = buildHeuristicAnalysis(files, allPaths, project.name);
+      aiPath = "heuristic";
     }
 
     await ctx.runMutation(internal.analysesStore.completeInternal, {
       projectId: args.projectId,
       userId,
       analysisId,
+      aiEngine: aiPath,
       result: {
         score: analysis.score,
         summary: analysis.summary,

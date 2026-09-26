@@ -1,5 +1,5 @@
 import { useQuery } from "convex/react";
-import { Gauge, LogOut, ShieldCheck } from "lucide-react";
+import { Gauge, KeyRound, LogOut, ShieldCheck } from "lucide-react";
 import { Link, useNavigate } from "react-router";
 import { NBButton } from "@/components/nb";
 import { api } from "@/convex/_generated/api";
@@ -27,6 +27,13 @@ export function AppHeader() {
           </span>
         </Link>
         <div className="flex items-center gap-3">
+          <Link
+            to="/settings"
+            className="flex items-center gap-1.5 border-2 border-edge bg-card px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-foreground hover:border-primary"
+          >
+            <KeyRound className="size-3.5 text-primary" />
+            <span className="hidden sm:inline">AI key</span>
+          </Link>
           {viewer?.role === "admin" && (
             <Link
               to="/admin"
