@@ -22,9 +22,16 @@ export function parseGitHubUrl(raw: string): { owner: string; repo: string } | n
   const owner = segments[0].toLowerCase();
   const repo = segments[1].replace(/\.git$/, "").toLowerCase();
   if (!/^[\w.-]{1,100}$/.test(owner) || !/^[\w.-]{1,100}$/.test(repo)) return null;
-  if (owner === "orgs" || repo === "topics") return null;
+  // Reserved GitHub top-level namespaces are not owners (org pages, topic
+  // listings, etc.), so URLs like github.com/topics/react are rejected.
+  if (RESERVED_OWNER_PATHS.has(owner)) return null;
   return { owner, repo };
 }
+
+const RESERVED_OWNER_PATHS = new Set([
+  "orgs", "topics", "features", "marketplace", "collections",
+  "trending", "sponsors", "explore", "settings", "notifications",
+]);
 
 /** Accepts optional github.com repo URL; used for demo source validation. */
 export function normalizeOptionalGithubUrl(raw?: string): string | undefined {
@@ -44,7 +51,9 @@ const ALLOWED_EXTENSIONS = new Set([
   ".py", ".rb", ".go", ".rs", ".java", ".kt", ".swift",
   ".php", ".cs", ".c", ".h", ".cpp", ".hpp", ".csproj", ".sln",
   ".html", ".css", ".scss", ".vue", ".svelte",
-  ".sql", ".prisma", ".graphql", ".gql", ".env.example", ".lock",
+  ".sql", ".prisma", ".graphql", ".gql", ".lock",
+  // full names of dotfiles, not suffixes
+  ".env.example",
 ]);
 
 const IGNORED_DIRS = new Set([
@@ -90,12 +99,22 @@ export function shouldIncludeFile(path: string): boolean {
   if (path.length > 260) return false;
   const lower = path.toLowerCase();
   if (lower.endsWith("/")) return false;
+
+  // Real secret files are never fetched. The .env.example template is allowed.
+  const fileName = lower.split("/").pop() ?? "";
+  if (fileName === ".env" || fileName.startsWith(".env.")) {
+    return fileName === ".env.example";
+  }
+
   const segments = lower.split("/");
   if (segments.some((s) => IGNORED_DIRS.has(s))) return false;
-  if (/(^|\/)\.env($|\.)/.test(lower) && !lower.endsWith(".env.example")) return false;
-  const ext = lower.slice(lower.lastIndexOf("."));
+
+  // Extension check: dotfiles have no extension and are rejected by default.
+  const dotIndex = lower.lastIndexOf(".");
+  if (dotIndex === -1) return false;
+  const ext = lower.slice(dotIndex);
   if (!ALLOWED_EXTENSIONS.has(ext)) return false;
-  if (/\.(png|jpe?g|gif|webp|svg|ico|mp4|mov|zip|gz|pdf|woff2?|ttf)$/.test(lower)) return false;
+
   return true;
 }
 
