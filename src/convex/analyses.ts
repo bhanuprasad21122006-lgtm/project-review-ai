@@ -26,6 +26,40 @@ import {
   clampScore,
   clampSeverity,
 } from "./lib/scoring";
+import { vly } from "../lib/vly-integrations";
+
+/**
+ * AI completion through the platform gateway (already configured for this
+ * deployment via VLY_INTEGRATION_KEY — no user-side setup required).
+ * Returns the model's text, or undefined so the caller can fall back to the
+ * heuristic scan when the gateway is unavailable.
+ */
+async function gatewayCompletion(
+  prompt: string,
+): Promise<string | undefined> {
+  try {
+    const result = await vly.ai.completion({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are a senior software architect and code reviewer. Respond with only valid JSON matching the requested schema — no markdown fences, no commentary.",
+        },
+        { role: "user", content: prompt },
+      ],
+      temperature: 0.2,
+      maxTokens: 4096,
+    });
+    if (!result?.success || !result.data) return undefined;
+    const content = result.data.choices?.[0]?.message?.content;
+    return typeof content === "string" && content.trim().length > 0
+      ? content
+      : undefined;
+  } catch {
+    return undefined;
+  }
+}
 
 const GEMINI_MODEL = "gemini-2.0-flash";
 const DEMO_FILE_LIST = [
@@ -397,7 +431,7 @@ function buildHeuristicAnalysis(
     categories,
     score: calculateScore(categories).score,
     summary: `Heuristic review of ${projectName}: ${allPaths.length} tracked files were inspected for structure and configuration signals. This is a structural check, not a full AI analysis.`,
-    verdict: "Heuristic scan complete — add GEMINI_API_KEY for full AI analysis.",
+    verdict: "Heuristic scan complete — live AI analysis was unavailable for this run.",
     strengths,
     weaknesses,
     nextSteps,
@@ -515,11 +549,15 @@ export const start = action({
       stage: "analyzing",
     });
 
-    // Stage 2: analyze with AI (or deterministic heuristic if no key).
+    // Stage 2: analyze with AI — Gemini when a key is set, otherwise the
+    // platform AI gateway (already configured for this deployment). The
+    // deterministic heuristic is the last-resort fallback so a run never
+    // hard-fails on AI availability.
     const apiKey = process.env.GEMINI_API_KEY;
     let analysis: ValidatedAnalysis;
-    if (apiKey) {
-      const context = packProjectContext(
+    let aiPath: "gemini" | "gateway" | "heuristic" = "heuristic";
+    const buildContext = () =>
+      packProjectContext(
         {
           fullName: String(meta.full_name ?? ""),
           description: meta.description ? String(meta.description) : undefined,
@@ -530,6 +568,8 @@ export const start = action({
         files,
         allPaths,
       );
+    if (apiKey) {
+      const context = buildContext();
       const res = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`,
         {
@@ -550,8 +590,18 @@ export const start = action({
           .join("") ?? undefined;
       if (!text) throw new Error("AI_RESPONSE_MALFORMED");
       analysis = validateAnalysis(extractJson(text));
+      aiPath = "gemini";
     } else {
-      analysis = buildHeuristicAnalysis(files, allPaths, project.name);
+      const gatewayText = await gatewayCompletion(
+        buildPrompt(buildContext(), project.name),
+      );
+      if (gatewayText) {
+        analysis = validateAnalysis(extractJson(gatewayText));
+        aiPath = "gateway";
+      } else {
+        analysis = buildHeuristicAnalysis(files, allPaths, project.name);
+        aiPath = "heuristic";
+      }
     }
 
     await ctx.runMutation(internal.analysesStore.completeInternal, {
