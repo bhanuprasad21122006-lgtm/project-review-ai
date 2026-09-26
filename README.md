@@ -1,7 +1,10 @@
-# Project Mentor AI
+# AI Project Mentor
 
 > **Automated, Evidence-Backed Engineering Audits & Technical Mentorship for GitHub Repositories.**
 
+🌐 **Live Application**: [**https://projectanalyzerai.freebuff.app/**](https://projectanalyzerai.freebuff.app/)
+
+[![Live App](https://img.shields.io/badge/Live_App-projectanalyzerai.freebuff.app-00C7B7?style=flat-square&logo=globe&logoColor=white)](https://projectanalyzerai.freebuff.app/)
 [![React](https://img.shields.io/badge/React-19.2-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
 [![Vite](https://img.shields.io/badge/Vite-7.2-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Convex](https://img.shields.io/badge/Convex-1.30-EE342F?style=flat-square&logo=convex&logoColor=white)](https://convex.dev/)
@@ -15,9 +18,13 @@
 ## 📑 Table of Contents
 
 - [Executive Summary](#-executive-summary)
-- [The Idea: Why Project Mentor AI?](#-the-idea-why-project-mentor-ai)
-  - [The Problem We Observed](#the-problem-we-observed)
-  - [The Vision & Core Philosophy](#the-vision--core-philosophy)
+- [Project Idea: Why AI Project Mentor?](#-project-idea)
+  - [The Challenge for Students & Developers](#the-challenge-for-students--developers)
+  - [The Core Goal](#the-core-goal)
+- [Solution & Intelligent Workflow](#-solution)
+  - [What the Platform Delivers](#what-the-platform-delivers)
+  - [How It Works (Workflow)](#-how-it-works)
+  - [Core Philosophy](#-core-philosophy)
 - [How We Implemented It: Technical Architecture](#-how-we-implemented-it-technical-architecture)
   - [End-to-End System Pipeline](#end-to-end-system-pipeline)
   - [1. Safe & Budget-Capped Repository Ingestion](#1-safe--budget-capped-repository-ingestion)
@@ -26,7 +33,7 @@
   - [4. Mathematical Scoring Model & Sanitization](#4-mathematical-scoring-model--sanitization)
   - [5. Reactive Neobrutalist Interface](#5-reactive-neobrutalist-interface)
   - [6. Security & Tenant Isolation](#6-security--tenant-isolation)
-- [The Solution We Got: What Project Mentor AI Delivers](#-the-solution-we-got-what-project-mentor-ai-delivers)
+- [In-Depth Evaluation Model & Analysis Deliverables](#-in-depth-evaluation-model--analysis-deliverables)
   - [Weighted 9-Category Health Score](#weighted-9-category-health-score)
   - [File-Level Evidence Citations](#file-level-evidence-citations)
   - [Actionable "Fix First" Prioritized Roadmaps](#actionable-fix-first-prioritized-roadmaps)
@@ -46,37 +53,86 @@
 
 ## ⚡ Executive Summary
 
-**Project Mentor AI** is an intelligent repository auditor and automated technical mentor. By supplying a public GitHub repository URL, engineers, team leads, and students receive a comprehensive, objective **health score (0–100)** across nine engineering dimensions, accompanied by:
+> 🚀 **Live Demo**: Experience the live platform at [**https://projectanalyzerai.freebuff.app/**](https://projectanalyzerai.freebuff.app/)
+
+**AI Project Mentor** is an intelligent repository auditor and automated technical mentor. By supplying a public GitHub repository URL, engineers, team leads, and students receive a comprehensive, objective **health score (0–100)** across key engineering dimensions, accompanied by:
 
 - Concrete **strengths** and **weaknesses** with severity classifications,
 - **Direct file-level citations** grounding every claim in actual repository code,
 - A prioritized action plan detailing **what to fix first**.
 
-> 🛡️ **Guaranteed Safe**: Project Mentor AI treats repositories purely as read-only structured data. It **never** executes code, downloads dependencies, executes arbitrary shell commands, or alters your codebase.
+> 🛡️ **Guaranteed Safe**: AI Project Mentor treats repositories purely as read-only structured data. It **never** executes code, downloads dependencies, executes arbitrary shell commands, or alters your codebase.
 
 ---
 
-## 💡 The Idea: Why Project Mentor AI?
+## 💡 Project Idea
 
-### The Problem We Observed
+**AI Project Mentor** is an AI-powered platform designed to help students understand, evaluate, improve, and confidently present their academic, portfolio, and hackathon projects.
 
-1. **The Code Review Bottleneck**:
-   In engineering teams and academic environments, senior engineers and mentors spend countless hours conducting routine code reviews. Reviews frequently swing between nitpicking syntax and missing high-level architectural anti-patterns, security lapses, and documentation gaps.
-2. **The Shallow Scope of Linters & SAST Tools**:
-   Static analysis tools (ESLint, SonarQube, Semgrep) excel at discovering syntax errors, stylistic inconsistencies, or regex-matched CVE signatures. However, they cannot answer fundamental architectural questions:
-   - _Does this project isolate business logic from delivery mechanisms?_
-   - _Is the problem scope clearly articulated and validated with tests?_
-   - _Is the data layer decoupled and secure against injection?_
-3. **The Danger of Hallucinatory AI Code Generators**:
-   Many modern AI tools attempt to write code without understanding whole-system constraints, producing boilerplate that exacerbates technical debt. Developers needed an analytical tool that **evaluates, mentors, and explains** rather than blindly generating code.
+Students often build projects using modern technologies and AI coding tools, but they may not fully understand the quality of their architecture, code, security, database design, AI implementation, testing, or documentation. This becomes a major challenge when they have to explain their project during a **viva, hackathon presentation, project review, or technical interview**.
 
-### The Vision & Core Philosophy
+AI Project Mentor addresses this problem by allowing students to submit their project or connect a GitHub repository. The platform reads and understands the available project structure, source code, documentation, dependencies, APIs, database design, and other relevant project information.
 
-Project Mentor AI was built to function as an **on-demand Staff Engineer**:
+The goal is not to build the project for the student, but to help the student **understand what they have built and identify how it can be improved**.
 
-- **Holistic Review**: Evaluate not just code syntax, but problem definition, architecture, database schemas, security posture, automated testing, documentation, innovation, and UX.
-- **Zero Hallucination Mandate**: The AI is prohibited from inventing nonexistent files or making unsubstantiated claims. Every strength and finding must cite physical files in the repository.
-- **Democratized Access**: Teams and students should not be locked into expensive proprietary SaaS tiers. Through **Bring-Your-Own-Key (BYOK)** support, users can plug in their own Gemini, OpenAI, Claude, or OpenRouter keys, while retaining access to a deterministic heuristic fallback if no key is present.
+---
+
+## 🚀 Solution
+
+AI Project Mentor creates an intelligent project-analysis workflow:
+
+**Student Project → Repository Analysis → Project Understanding → AI Analysis → Health Score → Improvement Roadmap → Project Viva**
+
+### What the Platform Delivers
+
+The platform analyzes the submitted project using AI and provides:
+
+- **Project Health Score** — an overall assessment of project quality.
+- **Architecture Analysis** — evaluates the application's structure and technical design.
+- **Code Quality Analysis** — identifies maintainability, organization, and implementation issues.
+- **Security Analysis** — identifies potential security weaknesses and unsafe practices.
+- **Database Analysis** — evaluates schema design, relationships, and data handling.
+- **AI Usage Analysis** — evaluates whether AI is meaningfully and safely integrated.
+- **Testing Analysis** — identifies missing tests and potential edge cases.
+- **Documentation Analysis** — evaluates README and project documentation.
+- **UX Analysis** — reviews usability and user experience.
+- **Innovation Analysis** — identifies technical and functional differentiation.
+- **Strengths & Weaknesses** — explains what the project does well and where it needs improvement.
+- **Prioritized Improvement Roadmap** — tells the student what should be improved first and why.
+- **Project-Specific AI Mentor** — answers questions using the student's analyzed project context.
+- **AI Viva Simulator** — generates questions based on the actual project and evaluates the student's answers.
+
+### 🔄 How It Works
+
+```text
+Student
+   ↓
+Create Project
+   ↓
+Connect GitHub Repository / Submit Project
+   ↓
+Repository & Project Reader
+   ↓
+Project Context Extraction
+   ↓
+AI Analysis
+   ↓
+Project Health Score
+   ↓
+Strengths + Weaknesses
+   ↓
+Improvement Roadmap
+   ↓
+AI Project Mentor
+   ↓
+Project-Specific Viva
+```
+
+### 🎯 Core Philosophy
+
+> **Don't just help students build projects. Help them understand, improve, validate, and confidently present the projects they build.**
+
+The platform acts as an **AI mentor and project evaluator**, while the student remains responsible for building, understanding, improving, and presenting their own project.
 
 ---
 
@@ -210,7 +266,7 @@ Built with **React 19**, **Tailwind CSS v4**, and custom **Neobrutalism UI token
 
 ---
 
-## 🎯 The Solution We Got: What Project Mentor AI Delivers
+## 📊 In-Depth Evaluation Model & Analysis Deliverables
 
 ### Weighted 9-Category Health Score
 
